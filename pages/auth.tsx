@@ -7,12 +7,13 @@ const Auth = () => {
   const [password, setPassword] = useState('');
   const [variant, setVariant] = useState('login');
 
+  // useCallback is optimisation hook which will return the fn
   const toggleVariant = useCallback(() => {
     setVariant((currentVariant) =>
       currentVariant === 'login' ? 'register' : 'login'
     );
+    /* add dependency array here so that it can render the application only once, if you don't add dependency array it on every other states changes it will render the application. if you keep states in the dependency array, if the state change in the array then only it will render the application. */
   }, []);
-
   return (
     <>
       <div className="relative h-full w-full bg-[url('/images/hero.jpg')] bg-center bg-fixed bg-cover">
@@ -50,10 +51,22 @@ const Auth = () => {
                     onChange={(e: any) => setPassword(e.target.value)}
                     value={password}
                     label='password'
-                    type='password'
+                    type=' '
                   />
                 </div>
-                <button></button>
+                <button className='bg-red-600 py-3 mt-10 text-white rounded-md w-full hover:bg-red-700 transition'>
+                  {variant === 'login' ? 'Login' : 'Register'}
+                </button>
+                <p className='text-neutral-500 mt-12'>
+                  {variant === 'login'
+                    ? 'First time using Netflix'
+                    : 'Already have an account? '}
+                  <span
+                    className='text-white ml-1 hover:underline cursor-pointer'
+                    onClick={toggleVariant}>
+                    {variant === 'login' ? 'Create an account' : 'Login'}
+                  </span>
+                </p>
               </div>
             </div>
           </nav>
