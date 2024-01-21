@@ -1,4 +1,5 @@
 import Input from '@/components/input';
+import axios from 'axios';
 import { useCallback, useState } from 'react';
 
 const Auth = () => {
@@ -14,6 +15,22 @@ const Auth = () => {
     );
     /* add dependency array here so that it can render the application only once, if you don't add dependency array it on every other states changes it will render the application. if you keep states in the dependency array, if the state change in the array then only it will render the application. */
   }, []);
+
+  const register = useCallback(async () => {
+    try {
+      await axios.post('/api/register', {
+        email,
+        name,
+        password,
+      });
+      setEmail('');
+      setName('');
+      setPassword('');
+    } catch (error) {
+      console.log(error);
+    }
+  }, [email, name, password]);
+
   return (
     <>
       <div className="relative h-full w-full bg-[url('/images/hero.jpg')] bg-center bg-fixed bg-cover">
@@ -51,10 +68,12 @@ const Auth = () => {
                     onChange={(e: any) => setPassword(e.target.value)}
                     value={password}
                     label='password'
-                    type=' '
+                    type='password'
                   />
                 </div>
-                <button className='bg-red-600 py-3 mt-10 text-white rounded-md w-full hover:bg-red-700 transition'>
+                <button
+                  onClick={register}
+                  className='bg-red-600 py-3 mt-10 text-white rounded-md w-full hover:bg-red-700 transition'>
                   {variant === 'login' ? 'Login' : 'Register'}
                 </button>
                 <p className='text-neutral-500 mt-12'>
