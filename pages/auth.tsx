@@ -1,6 +1,8 @@
+/* eslint-disable @next/next/no-img-element */
 import Input from '@/components/input';
 import axios from 'axios';
 import { useCallback, useState } from 'react';
+import { signIn } from 'next-auth/react';
 
 const Auth = () => {
   const [email, setEmail] = useState('');
@@ -16,6 +18,27 @@ const Auth = () => {
     /* add dependency array here so that it can render the application only once, if you don't add dependency array it on every other states changes it will render the application. if you keep states in the dependency array, if the state change in the array then only it will render the application. */
   }, []);
 
+  const initialValues = () => {
+    setEmail('');
+    setName('');
+    setPassword('');
+  };
+
+  const login = () => {
+    try {
+      signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+        callbackUrl: '/',
+      });
+      // await initialValues();
+      //  router.push('/profiles');
+    } catch (error) {
+      console.log('something is wrong!', error);
+    }
+  };
+
   const register = useCallback(async () => {
     try {
       await axios.post('/api/register', {
@@ -23,9 +46,7 @@ const Auth = () => {
         name,
         password,
       });
-      setEmail('');
-      setName('');
-      setPassword('');
+      // await initialValues();
     } catch (error) {
       console.log(error);
     }
@@ -72,7 +93,7 @@ const Auth = () => {
                   />
                 </div>
                 <button
-                  onClick={register}
+                  onClick={variant === 'login' ? login : register}
                   className='bg-red-600 py-3 mt-10 text-white rounded-md w-full hover:bg-red-700 transition'>
                   {variant === 'login' ? 'Login' : 'Register'}
                 </button>

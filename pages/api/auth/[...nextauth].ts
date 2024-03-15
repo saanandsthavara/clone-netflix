@@ -18,7 +18,7 @@ export default NextAuth({
           type: 'password',
         },
       },
-      async authorize(credentials) {
+      async authorize(credentials: any) {
         if (credentials?.email || credentials?.password) {
           throw new Error('Email and Password are required');
         }
@@ -31,7 +31,7 @@ export default NextAuth({
           throw Error('Email does not exists!');
         }
         const isCorrectPassword = await compare(
-          credentials?.password || '',
+          credentials.password,
           user.hashedPassword
         );
         if (!isCorrectPassword) {
@@ -42,7 +42,7 @@ export default NextAuth({
     }),
   ],
   pages: {
-    signIn: '/Auth',
+    signIn: '/auth',
   },
   debug: process.env.NODE_ENV === 'development',
   session: {
